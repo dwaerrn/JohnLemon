@@ -1,4 +1,5 @@
-# Лабораторна робота 8
+<img width="384" height="624" alt="ezgif-204cad543636a158" src="https://github.com/user-attachments/assets/6f0a8aa7-d381-4de8-8775-cb2d10a9d075" />
+<img width="384" height="624" alt="video_2026-11-25_16-09-37" src="https://github.com/user-attachments/assets/41449453-7d9e-45a7-aeb5-30741deabe6f" /># Лабораторна робота 8
 
 AR-застосунок для Android на Unity з відстеженням зображення-маркера. Коли камера бачить маркер, на ньому з'являється персонаж JohnLemon. Ним можна керувати за допомогою екранного джойстика.
 
