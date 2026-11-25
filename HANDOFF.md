@@ -56,3 +56,9 @@ Two on-screen buttons, **Left** and **Right**. Holding one makes JohnLemon walk 
 ## User notes
 - Working in the Unity Editor GUI, and fairly new to Unity: give click-by-click directions, saying where to click (Project window, Inspector tab, and so on).
 - The Windows UI is partly in Ukrainian; the Unity UI is in English.
+
+## Update (session 2)
+- **Root cause 1 (fixed):** the prefab nested the bones under `JohnLemonMesh/Parent`, but the clips/avatar expect `Root/Hips` directly under the Animator. `Root` and the mesh were moved directly under `JohnLemon`, the wrappers removed, and the scale changed from 0.2 to 0.1 to keep the size. Has Exit Time is now off on all transitions.
+- **Root cause 2 (fixed):** `ARTrackedImageManager` makes the spawned prefab's *top object* the tracked image and rewrites its pose every frame, so movement and rotation on the top object were undone. The prefab now has an empty root `JohnLemonAnchor`, with `JohnLemon` (Animator, Rigidbody, ARPlayerMovement) as its child. `m_TrackedImagePrefab` in `AR_Marker.unity` now points at the anchor.
+- The scene's own JohnLemon copy is inactive (`m_IsActive: 0`). It's harmless and can be deleted.
+- Not yet verified on device. If he still doesn't move, check the `root motion:` log value.
