@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// AR version of John Lemon's PlayerMovement.
 /// Reads input from the on-screen HoldButtons (plus the keyboard in the Editor),
-/// drives the "IsWalking" animator bool, and moves with root motion like the original.
+/// drives the "IsWalking" animator bool, and moves at Walk Speed (or with root motion if enabled).
 /// Movement is camera-relative by default, so "Left" always means left on the screen,
 /// whichever side of the marker you're looking from.
 /// </summary>
@@ -18,6 +18,14 @@ public class ARPlayerMovement : MonoBehaviour
 
     [Tooltip("Recommended in AR: there is usually no floor collider, so gravity would make him fall.")]
     public bool makeKinematic = true;
+
+    [Tooltip("Off: move at Walk Speed (needed because the Walk clip walks in place). " +
+             "On: take the speed from the animation's root motion, like the tutorial.")]
+    public bool useRootMotion = false;
+
+    [Tooltip("Walking speed in the character's own units per second (he is about 1.35 units tall). " +
+             "Scales with the character, so it looks the same at any size.")]
+    public float walkSpeed = 1f;
 
     Animator m_Animator;
     Rigidbody m_Rigidbody;
@@ -97,10 +105,13 @@ public class ARPlayerMovement : MonoBehaviour
 
     void OnAnimatorMove()
     {
-        // Same as the tutorial: the walk animation's root motion sets the speed. It's already
-        // in world scale, so a shrunk-down Lemon walks at the right size.
-        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
+        // The Walk clip walks in place (no root motion), so by default move at a fixed speed,
+        // scaled by the character's size so a shrunk-down Lemon walks at the right pace.
+        float step = useRootMotion
+            ? m_Animator.deltaPosition.magnitude
+            : walkSpeed * transform.lossyScale.x * Time.deltaTime;
+
+        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * step);
         m_Rigidbody.MoveRotation(m_Rotation);
-		Debug.Log("root motion: " + m_Animator.deltaPosition.magnitude);
     }
 }
