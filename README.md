@@ -4,6 +4,8 @@ AR-застосунок для Android на Unity з відстеженням з
 
 
 <img width="384" height="624" alt="video_2026-11-25_16-09-37" src="https://github.com/user-attachments/assets/41449453-7d9e-45a7-aeb5-30741deabe6f" />
+
+
 ## Керування
 
 Екранний джойстик унизу екрана задає напрямок руху відносно камери:
