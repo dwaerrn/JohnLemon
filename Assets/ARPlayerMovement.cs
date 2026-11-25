@@ -4,7 +4,7 @@ using UnityEngine.XR.ARSubsystems;
 
 /// <summary>
 /// AR version of John Lemon's PlayerMovement.
-/// Reads input from the on-screen HoldButtons (plus the keyboard in the Editor),
+/// Reads input from the on-screen CirclePad (plus the keyboard in the Editor),
 /// drives the "IsWalking" animator bool, and moves at Walk Speed (or with root motion if enabled).
 /// Movement is camera-relative by default, so "Left" always means left on the screen,
 /// whichever side of the marker you're looking from.
@@ -76,8 +76,8 @@ public class ARPlayerMovement : MonoBehaviour
             }
         }
 
-        float horizontal = HoldButton.Horizontal;
-        float vertical = HoldButton.Vertical;
+        float horizontal = CirclePad.Value.x;
+        float vertical = CirclePad.Value.y;
 
 #if UNITY_EDITOR && ENABLE_LEGACY_INPUT_MANAGER
         // Lets you test with WASD/arrow keys in the Editor.
@@ -104,8 +104,9 @@ public class ARPlayerMovement : MonoBehaviour
             forward = reference.forward;
         }
 
-        m_Movement = right * horizontal + forward * vertical;
-        if (m_Movement.sqrMagnitude > 1f) m_Movement.Normalize();
+        // Direction only: he always walks at full Walk Speed, so his steps match the Walk
+        // animation instead of sliding when the pad is only pushed a little.
+        m_Movement = (right * horizontal + forward * vertical).normalized;
 
         bool isWalking = m_Movement.sqrMagnitude > 0.0001f;
         m_Animator.SetBool("IsWalking", isWalking);
